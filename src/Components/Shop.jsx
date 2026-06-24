@@ -10,8 +10,11 @@ import {
   Tag,
   Button,
   Spin,
+  Rate,
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import Footer from "../Components/Footer";
 
 const { Title, Paragraph } = Typography;
 
@@ -21,246 +24,174 @@ const Shop = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
-  const [sort, setSort] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get("https://dummyjson.com/products");
-      setProducts(res.data.products);
-      setFiltered(res.data.products);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
+    const res = await axios.get("https://dummyjson.com/products");
+    setProducts(res.data.products);
+    setFiltered(res.data.products);
+    setLoading(false);
   };
 
-  // 🔍 SEARCH + FILTER + SORT
   useEffect(() => {
     let data = [...products];
 
-    // search
     if (search) {
-      data = data.filter((item) =>
-        item.title.toLowerCase().includes(search.toLowerCase())
+      data = data.filter((p) =>
+        p.title.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // category
     if (category !== "all") {
-      data = data.filter((item) => item.category === category);
-    }
-
-    // sort
-    if (sort === "low") {
-      data.sort((a, b) => a.price - b.price);
-    } else if (sort === "high") {
-      data.sort((a, b) => b.price - a.price);
-    } else if (sort === "rating") {
-      data.sort((a, b) => b.rating - a.rating);
+      data = data.filter((p) => p.category === category);
     }
 
     setFiltered(data);
-  }, [search, category, sort, products]);
+  }, [search, category, products]);
 
   return (
-    <div className="min-h-screen bg-white pt-36 px-6">
+    <div className="bg-white">
 
-      {/* HEADER */}
-      <div className="text-center max-w-2xl mx-auto mb-10">
-        <Title className="!text-3xl !font-bold !text-gray-900">
-          Shop Premium Products
-        </Title>
+      {/* ================= HERO (SHOPIFY STYLE) ================= */}
+      <div className="relative h-[70vh] flex items-center justify-center bg-black text-white">
 
-        <Paragraph className="!text-gray-500">
-          Search, filter and discover the best products in one place
-        </Paragraph>
-      </div>
+        <div className="text-center max-w-3xl px-5">
+          <p className="tracking-[0.3em] text-gray-400 text-xs uppercase">
+            New Season Drop
+          </p>
 
-      {/* FILTER BAR */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 justify-between mb-10">
+          <h1 className="text-5xl font-black mt-3">
+            Minimal Shopping <br /> Maximum Impact
+          </h1>
 
-        {/* SEARCH */}
-        <Input
-          prefix={<SearchOutlined />}
-          placeholder="Search products..."
-          className="h-11 rounded-xl"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+          <p className="text-gray-400 mt-5">
+            Discover premium electronics, fashion & lifestyle products curated for modern living.
+          </p>
 
-        {/* FILTERS */}
-        <div className="flex gap-3">
-
-          <Select
-            className="w-40"
-            value={category}
-            onChange={(value) => setCategory(value)}
-            options={[
-              { value: "all", label: "All" },
-              { value: "smartphones", label: "Smartphones" },
-              { value: "laptops", label: "Laptops" },
-              { value: "fragrances", label: "Fragrances" },
-              { value: "skincare", label: "Skincare" },
-            ]}
-          />
-
-          <Select
-            className="w-44"
-            value={sort}
-            onChange={(value) => setSort(value)}
-            placeholder="Sort By"
-            options={[
-              { value: "low", label: "Price Low → High" },
-              { value: "high", label: "Price High → Low" },
-              { value: "rating", label: "Top Rated" },
-            ]}
-          />
-
-        </div>
-      </div>
-
-      {/* PRODUCTS */}
-      <div className="max-w-7xl mx-auto">
-
-        {loading ? (
-          <div className="flex justify-center items-center h-80">
-            <Spin size="large" />
+          <div className="mt-8 flex justify-center">
+            <Input
+              prefix={<SearchOutlined />}
+              placeholder="Search products..."
+              className="h-12 w-96 rounded-full"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-        ) : (
-          <Row gutter={[20, 20]}>
-            {filtered.map((product) => (
-              <Col xs={24} sm={12} md={8} lg={6} key={product.id}>
+        </div>
 
-              <Card
-               hoverable
-               bordered={false}
-               bodyStyle={{ padding: 20 }}
-               onClick={() => navigate(`/detail/${product.id}`)}
-               className="group w-full max-w-[340px] cursor-pointer overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
-               cover={
-                 <div className="relative overflow-hidden bg-gradient-to-b from-white to-gray-100">
-             
-                   {/* Discount */}
-                <Tag
-               color="error"
-               className="!absolute top-4 left-4 z-20 !rounded-full !px-3 !py-1 !bg-white !text-red-500 !border border-red-400 font-medium shadow-sm"
-             >
-               {Math.round(product.discountPercentage)}% OFF
-             </Tag>
-             
-                   {/* Wishlist */}
-                   <button
-                     onClick={(e) => e.stopPropagation()}
-                     className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition hover:bg-black hover:text-white"
-                   >
-                     ♡
-                   </button>
-             
-                   <img
-                     src={product.images[0]}
-                     alt={product.title}
-                     className="h-56 w-full object-contain p-5 transition duration-500 group-hover:scale-105"
-                   />
-                 </div>
-               }
-             >
-               <div className="space-y-3">
-             
-                 {/* Category */}
-                 <Tag
-                   color="default"
-                   className="!rounded-full capitalize"
-                 >
-                   {product.category}
-                 </Tag>
-             
-                 {/* Title */}
-                 <Title
-                   level={5}
-                   ellipsis={{ rows: 1 }}
-                   className="!mb-0 !font-semibold"
-                 >
-                   {product.title}
-                 </Title>
-             
-                 {/* Description */}
-                 <Paragraph
-                   ellipsis={{ rows: 2 }}
-                   className="!mb-0 !text-sm !text-gray-500"
-                 >
-                   {product.description}
-                 </Paragraph>
-             
-                 {/* Rating */}
-                 <div className="flex items-center justify-between">
-             
-                   <Rate
-                     disabled
-                     allowHalf
-                     defaultValue={product.rating}
-                     style={{ fontSize: 14 }}
-                   />
-             
-                   <span className="text-xs text-gray-500">
-                     ({product.rating})
-                   </span>
-             
-                 </div>
-             
-                 {/* Price + Button */}
-                 <div className="flex items-end justify-between pt-2">
-             
-                   <div>
-             
-                     <p className="text-xs text-gray-400 line-through">
-                       ${(product.price * 1.2).toFixed(0)}
-                     </p>
-             
-                     <h3 className="text-2xl font-bold text-black">
-                       ${product.price}
-                     </h3>
-             
-                   </div>
-             
-                   <Button
-                     type="primary"
-                     className={`!h-10 !rounded-xl !border-none ${
-                       authData || authDataGoogle
-                         ? isItemAdded(product.id)
-                           ? "!bg-emerald-600 hover:!bg-emerald-700"
-                           : "!bg-black hover:!bg-zinc-800"
-                         : "!bg-black hover:!bg-zinc-800"
-                     }`}
-                     onClick={(e) => {
-                       e.stopPropagation();
-                       addToCart(product);
-                     }}
-                   >
-                     {authData || authDataGoogle
-                       ? isItemAdded(product.id)
-                         ? "Added ✓"
-                         : "Add Cart"
-                       : "Add Cart"}
-                   </Button>
-             
-                 </div>
-             
-               </div>
-             </Card>
+      </div>
 
-              </Col>
-            ))}
-          </Row>
+      {/* ================= CATEGORY STRIP ================= */}
+      <div className="max-w-7xl mx-auto px-5 py-8 flex gap-3 overflow-x-auto">
+
+        {["all", "smartphones", "laptops", "fragrances", "skincare"].map(
+          (cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              className={`px-5 py-2 rounded-full border text-sm whitespace-nowrap transition
+                ${
+                  category === cat
+                    ? "bg-black text-white"
+                    : "border-gray-300 text-gray-600 hover:border-black"
+                }`}
+            >
+              {cat.toUpperCase()}
+            </button>
+          )
         )}
 
       </div>
 
+      {/* ================= PRODUCTS SECTION ================= */}
+      <div className="max-w-7xl mx-auto px-5 pb-20">
+
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <>
+            {/* SECTION TITLE */}
+            <div className="mb-10">
+              <h2 className="text-2xl font-bold">Featured Products</h2>
+              <p className="text-gray-500 text-sm">
+                Hand-picked items for your lifestyle
+              </p>
+            </div>
+
+            {/* GRID */}
+            <Row gutter={[30, 40]}>
+              {filtered.map((product) => (
+                <Col xs={24} sm={12} md={8} lg={6} key={product.id}>
+
+                  <div
+                    onClick={() => navigate(`/detail/${product.id}`)}
+                    className="cursor-pointer group"
+                  >
+
+                    {/* IMAGE BLOCK */}
+                    <div className="bg-gray-100 rounded-2xl p-6 overflow-hidden">
+
+                      <img
+                        src={product.images[0]}
+                        className="h-52 w-full object-contain group-hover:scale-105 transition duration-500"
+                      />
+
+                      <Tag className="absolute mt-2 bg-black text-white border-none rounded-full px-3">
+                        {Math.round(product.discountPercentage)}% OFF
+                      </Tag>
+
+                    </div>
+
+                    {/* TEXT BLOCK */}
+                    <div className="mt-4">
+
+                      <p className="text-xs text-gray-400 uppercase">
+                        {product.category}
+                      </p>
+
+                      <h3 className="text-lg font-semibold mt-1">
+                        {product.title}
+                      </h3>
+
+                      <Rate disabled defaultValue={product.rating} className="text-sm mt-1" />
+
+                      <div className="flex justify-between items-center mt-3">
+
+                        <div>
+                          <p className="text-xs text-gray-400 line-through">
+                            ${(product.price * 1.2).toFixed(0)}
+                          </p>
+                          <p className="text-xl font-bold">
+                            ${product.price}
+                          </p>
+                        </div>
+
+                        <button className="bg-black text-white px-4 py-2 rounded-full text-sm hover:bg-gray-800">
+                          View
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </Col>
+              ))}
+            </Row>
+          </>
+        )}
+
+      </div>
+
+      <Footer />
     </div>
   );
 };

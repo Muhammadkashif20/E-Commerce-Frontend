@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Card, Button, Typography, Row, Col, Spin } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router-dom";
 import { Tag, Rate } from "antd";
 import { cartContext } from "../context/cartContext";
 const { Title, Paragraph } = Typography;
@@ -15,6 +15,7 @@ const Products = ({ filteredData, setFilteredData }) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchProducts = async () => {
+      const navigate=useNavigation()
       try {
         setLoading(true);
         const res = await axios.get("https://dummyjson.com/products");
@@ -79,6 +80,7 @@ const Products = ({ filteredData, setFilteredData }) => {
           onClick={() => {
             localStorage.removeItem("filteredData");
             setFilteredData(null);
+            navigate("/shop")
           }}
         >
           Show All Products
@@ -90,6 +92,7 @@ const Products = ({ filteredData, setFilteredData }) => {
               onClick={() => {
                 localStorage.removeItem("filteredData");
                 setFilteredData(null);
+                
               }}
             >
               Show All Products
