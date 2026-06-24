@@ -12,6 +12,7 @@ import LayoutWithNavbar from "./Components/Layout";
 import Signup from "./auth/Signup";
 import BuyNow from "./Components/BuyNow";
 import AddCart from "./Components/AddCart";
+import Shop from "./Components/Shop";
 import ProtectRoutes from "./Components/ProtectRoutes";
 
 const App = () => {
@@ -69,6 +70,8 @@ const App = () => {
             }
           />
           <Route path="/detail/:id" element={<DealDetail />} />
+          <Route path="/shop" element={<Shop />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
