@@ -1,37 +1,44 @@
-import React from "react";
-import { Button, Typography, Row, Col } from "antd";
-import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
 
-const { Title, Paragraph } = Typography;
+import "swiper/css";
+import "swiper/css/pagination";
+
+import Banner1 from "../assets/banners/banner1.png";
+import Banner2 from "../assets/banners/banner2.png";
+import Banner3 from "../assets/banners/banner3.png";
+
+const banners = [Banner1, Banner2, Banner3];
 
 const HeroSection = () => {
   return (
-    <div className="bg-white py-28 text-gray-800">
-      <div className="container mx-auto px-6">
-        <Row justify="center">
-          <Col xs={24} md={20} lg={16}>
-            <div className="text-center animate-fadeInUp">
-              <Title level={1} className="!text-4xl md:!text-5xl !font-bold !leading-tight mb-4">
-                Your One-Stop Shop for <br />
-                <span className="text-blue-600">Quality & Affordability</span>
-              </Title>
-              <Paragraph className="text-lg md:text-xl text-gray-600 mb-8">
-                Discover premium products, unbeatable prices, and exclusive deals — all in one place. It's time to shop smarter.
-              </Paragraph>
-              <Link to="/deals">
-                <Button
-                  type="primary"
-                  size="large"
-                  className="bg-blue-600 hover:bg-blue-700 transition-all duration-300 px-8 py-2 rounded-lg text-white shadow-lg hover:shadow-xl"
-                >
-                  Browse Exclusive Deals
-                </Button>
-              </Link>
-            </div>
-          </Col>
-        </Row>
+    <section className="pt-24">
+      <div className="max-w-7xl mx-auto px-4">
+
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          pagination={{ clickable: true }}
+          loop
+          speed={800}
+          className="rounded-3xl shadow-xl"
+        >
+          {banners.map((banner, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={banner}
+                alt={`Banner ${index + 1}`}
+                className="w-full h-[180px] sm:h-[240px] md:h-[300px] lg:h-[380px] object-fit rounded-3xl"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
       </div>
-    </div>
+    </section>
   );
 };
 
