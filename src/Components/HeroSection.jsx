@@ -4,9 +4,9 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import Banner1 from "../assets/banners/banner1.png";
-import Banner2 from "../assets/banners/banner2.png";
-import Banner3 from "../assets/banners/banner3.png";
+import Banner1 from "../assets/banners/banner7.jpeg";
+import Banner2 from "../assets/banners/banner7.jpeg";
+import Banner3 from "../assets/banners/banner7.jpeg";
 
 const banners = [Banner1, Banner2, Banner3];
 
@@ -31,8 +31,7 @@ const HeroSection = () => {
               <img
                 src={banner}
                 alt={`Banner ${index + 1}`}
-                // className="w-full h-[180px] sm:h-[240px] md:h-[300px] lg:h-[380px] object-fit rounded-3xl"
-                className="w-full h-[180px] sm:h-[240px] md:h-[300px] lg:h-[380px] rounded-3xl bg-center bg-cover"
+                className="w-full h-[180px] sm:h-[240px] md:h-[300px] lg:h-[400px] object-fit rounded-3xl"
               />
             </SwiperSlide>
           ))}
