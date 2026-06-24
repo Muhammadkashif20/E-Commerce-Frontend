@@ -42,8 +42,8 @@ const Products = ({ filteredData, setFilteredData }) => {
   const displayData = filterData
     ? filterData
     : filteredData
-    ? filteredData
-    : products;
+      ? filteredData
+      : products;
   return (
     <div className="min-h-screen bg-gray-50 p-10">
       <Title level={2} className="text-center mb-8">
@@ -114,14 +114,13 @@ const Products = ({ filteredData, setFilteredData }) => {
                   <div className="flex justify-between gap-2">
                     <Button
                       type="primary"
-                      className={`w-1/2 ${
-                        authData? (
+                      className={`w-1/2 ${authData ? (
                           isItemAdded(product.id)
-                          ? "bg-blue-700 text-white"
-                          : "bg-blue-500 text-white"
+                            ? "bg-blue-700 text-white"
+                            : "bg-blue-500 text-white"
                         ) : "bg-blue-500 text-white"
-                          
-                      }`}
+
+                        }`}
                       onClick={() => addToCart(product)}
                     >
                       {authData || authDataGoogle
