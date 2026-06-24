@@ -12,7 +12,7 @@ const banners = [Banner1, Banner2, Banner3];
 
 const HeroSection = () => {
   return (
-    <section className="pt-24">
+    <section className="pt-36">
       <div className="max-w-7xl mx-auto px-4">
 
         <Swiper
@@ -31,7 +31,8 @@ const HeroSection = () => {
               <img
                 src={banner}
                 alt={`Banner ${index + 1}`}
-                className="w-full h-[180px] sm:h-[240px] md:h-[300px] lg:h-[380px] object-fit rounded-3xl"
+                // className="w-full h-[180px] sm:h-[240px] md:h-[300px] lg:h-[380px] object-fit rounded-3xl"
+                className="w-full h-[180px] sm:h-[240px] md:h-[300px] lg:h-[380px] rounded-3xl bg-center bg-cover"
               />
             </SwiperSlide>
           ))}

@@ -45,104 +45,194 @@ const Products = ({ filteredData, setFilteredData }) => {
       ? filteredData
       : products;
   return (
-    <div className="min-h-screen bg-gray-50 p-10">
-      <Title level={2} className="text-center mb-8">
-        Our Featured Products
-      </Title>
-      {filterData && (
-        <div className="text-center mb-6">
-          <Button
-            onClick={() => {
-              localStorage.removeItem("filteredData");
-              setFilteredData(null);
-            }}
-          >
-            Show All Products
-          </Button>
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-gray-100 py-16">
+      <div className="max-w-7xl mx-auto px-5">
+     <div className="text-center mb-14">
 
-      {loading ? (
-        <div className="flex justify-center items-center h-80">
-          <Spin size="large" />
-        </div>
-      ) : (
-        <Row gutter={[24, 24]} justify="center">
-          {displayData?.map((product) => (
-            <Col
-              key={product.id}
-              xs={24}
-              sm={12}
-              md={8}
-              lg={6}
-              className="flex justify-center"
+  {/* Accent line */}
+  <p className="text-xs uppercase tracking-[6px] text-gray-400 font-medium">
+    Featured Collection
+  </p>
+
+  {/* Main Heading */}
+  <Title
+    level={2}
+    className="!mb-3 !font-bold !text-gray-900 !tracking-tight"
+  >
+    Explore Our <span className="text-black">Products</span>
+  </Title>
+
+  {/* Subtitle */}
+  <Paragraph className="!text-gray-500 !text-base max-w-xl mx-auto">
+    Discover premium products carefully selected for every lifestyle, designed
+    for quality, comfort, and modern living.
+  </Paragraph>
+
+  {/* small underline accent */}
+  <div className="w-16 h-[2px] bg-black mx-auto mt-5 opacity-10"></div>
+
+</div>
+        <Button
+          type="primary"
+          size="large"
+          className="!rounded-xl !bg-black hover:!bg-black !border-none !shadow-lg mb-10"
+          onClick={() => {
+            localStorage.removeItem("filteredData");
+            setFilteredData(null);
+          }}
+        >
+          Show All Products
+        </Button>
+
+        {filterData && (
+          <div className="text-center mb-6">
+            <Button
+              onClick={() => {
+                localStorage.removeItem("filteredData");
+                setFilteredData(null);
+              }}
             >
-              <Card
-                hoverable
-                className="w-full max-w-xs flex flex-col justify-between shadow-md rounded-xl border border-gray-200"
-                cover={
-                  <img
-                    alt={product.title}
-                    src={product.images[0]}
-                    className="h-56 object-cover rounded-t-xl"
-                  />
-                }
+              Show All Products
+            </Button>
+          </div>
+        )}
+
+        {loading ? (
+          <div className="flex justify-center items-center h-80">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <Row gutter={[24, 24]} justify="center">
+            {displayData?.map((product) => (
+              <Col
+                key={product.id}
+                xs={24}
+                sm={12}
+                md={8}
+                lg={6}
+                className="flex justify-center"
               >
-                <div>
-                  <Title level={5} ellipsis className="mb-1">
-                    {product.title}
-                  </Title>
-                  <Paragraph ellipsis={{ rows: 2 }} className="text-sm">
-                    {product.description}
-                  </Paragraph>
+   <Card
+  hoverable
+  bordered={false}
+  bodyStyle={{ padding: 20 }}
+  onClick={() => navigate(`/detail/${product.id}`)}
+  className="group w-full max-w-[340px] cursor-pointer overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
+  cover={
+    <div className="relative overflow-hidden bg-gradient-to-b from-white to-gray-100">
 
-                  <div className="flex items-center justify-between mt-2">
-                    <Tag color="blue" className="capitalize">
-                      {product.category}
-                    </Tag>
-                    <Rate disabled defaultValue={Math.round(product.rating)} />
-                  </div>
-                </div>
+      {/* Discount */}
+   <Tag
+  color="error"
+  className="!absolute top-4 left-4 z-20 !rounded-full !px-3 !py-1 !bg-white !text-red-500 !border border-red-400 font-medium shadow-sm"
+>
+  {Math.round(product.discountPercentage)}% OFF
+</Tag>
 
-                <div className="mt-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-lg font-semibold text-green-600">
-                      ${product.price}
-                    </span>
-                  </div>
+      {/* Wishlist */}
+      <button
+        onClick={(e) => e.stopPropagation()}
+        className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition hover:bg-black hover:text-white"
+      >
+        ♡
+      </button>
 
-                  <div className="flex justify-between gap-2">
-                    <Button
-                      type="primary"
-                      className={`w-1/2 ${authData ? (
-                          isItemAdded(product.id)
-                            ? "bg-blue-700 text-white"
-                            : "bg-blue-500 text-white"
-                        ) : "bg-blue-500 text-white"
+      <img
+        src={product.images[0]}
+        alt={product.title}
+        className="h-56 w-full object-contain p-5 transition duration-500 group-hover:scale-105"
+      />
+    </div>
+  }
+>
+  <div className="space-y-3">
 
-                        }`}
-                      onClick={() => addToCart(product)}
-                    >
-                      {authData || authDataGoogle
-                        ? isItemAdded(product.id)
-                          ? "Item is Added"
-                          : "Add to Cart"
-                        : "Add to Cart"}
-                    </Button>
+    {/* Category */}
+    <Tag
+      color="default"
+      className="!rounded-full capitalize"
+    >
+      {product.category}
+    </Tag>
 
-                    <Button
-                      className="w-1/2"
-                      onClick={() => navigate(`/detail/${product.id}`)}
-                    >
-                      View Details
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      )}
+    {/* Title */}
+    <Title
+      level={5}
+      ellipsis={{ rows: 1 }}
+      className="!mb-0 !font-semibold"
+    >
+      {product.title}
+    </Title>
+
+    {/* Description */}
+    <Paragraph
+      ellipsis={{ rows: 2 }}
+      className="!mb-0 !text-sm !text-gray-500"
+    >
+      {product.description}
+    </Paragraph>
+
+    {/* Rating */}
+    <div className="flex items-center justify-between">
+
+      <Rate
+        disabled
+        allowHalf
+        defaultValue={product.rating}
+        style={{ fontSize: 14 }}
+      />
+
+      <span className="text-xs text-gray-500">
+        ({product.rating})
+      </span>
+
+    </div>
+
+    {/* Price + Button */}
+    <div className="flex items-end justify-between pt-2">
+
+      <div>
+
+        <p className="text-xs text-gray-400 line-through">
+          ${(product.price * 1.2).toFixed(0)}
+        </p>
+
+        <h3 className="text-2xl font-bold text-black">
+          ${product.price}
+        </h3>
+
+      </div>
+
+      <Button
+        type="primary"
+        className={`!h-10 !rounded-xl !border-none ${
+          authData || authDataGoogle
+            ? isItemAdded(product.id)
+              ? "!bg-emerald-600 hover:!bg-emerald-700"
+              : "!bg-black hover:!bg-zinc-800"
+            : "!bg-black hover:!bg-zinc-800"
+        }`}
+        onClick={(e) => {
+          e.stopPropagation();
+          addToCart(product);
+        }}
+      >
+        {authData || authDataGoogle
+          ? isItemAdded(product.id)
+            ? "Added ✓"
+            : "Add Cart"
+          : "Add Cart"}
+      </Button>
+
+    </div>
+
+  </div>
+</Card>
+              </Col>
+            ))}
+          </Row>
+        )}
+      </div>
     </div>
   );
 };
